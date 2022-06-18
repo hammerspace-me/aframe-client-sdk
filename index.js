@@ -20,10 +20,10 @@ const PROVIDER_LOADERS = {
       loop: "repeat",
       crossFadeDuration: 0.4,
     });
-    avatarEntity.setAttribute("restrict-rotation", { offset: 180 });
+    avatarEntity.setAttribute("backpack-restrict-rotation", { offset: 180 });
   },
   "avatar-connect-crypto-avatars": function (backpackAvatar, avatarEntity) {
-    avatarEntity.setAttribute("restrict-rotation", { offset: 0 });
+    avatarEntity.setAttribute("backpack-restrict-rotation", { offset: 0 });
   },
 };
 
@@ -101,7 +101,9 @@ AFRAME.registerComponent("backpack-avatar", {
       loop: "repeat",
       crossFadeDuration: 0.4,
     });
-    this.avatarEntity.setAttribute("restrict-rotation", { offset: 180 });
+    this.avatarEntity.setAttribute("backpack-restrict-rotation", {
+      offset: 180,
+    });
   },
 });
 
