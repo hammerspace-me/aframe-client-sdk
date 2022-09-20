@@ -6,7 +6,7 @@ if (typeof AFRAME === "undefined") {
 }
 
 const PROVIDER_LOADERS = {
-  "avatar-connect-ready-player-me": function (backpackAvatar, avatarEntity) {
+  "ready-player-me": function (backpackAvatar, avatarEntity) {
     if (!backpackAvatar.metadata || !backpackAvatar.metadata.outfitGender) {
       console.error("Required metadata is not present");
     }
@@ -22,7 +22,10 @@ const PROVIDER_LOADERS = {
     });
     avatarEntity.setAttribute("backpack-restrict-rotation", { offset: 180 });
   },
-  "avatar-connect-crypto-avatars": function (backpackAvatar, avatarEntity) {
+  "crypto-avatars": function (backpackAvatar, avatarEntity) {
+    avatarEntity.setAttribute("backpack-restrict-rotation", { offset: 0 });
+  },
+  meebits: function (backpackAvatar, avatarEntity) {
     avatarEntity.setAttribute("backpack-restrict-rotation", { offset: 0 });
   },
 };
@@ -226,7 +229,7 @@ AFRAME.registerComponent("backpack-avatar-selector", {
     avatarEl.setAttribute("position", "0 0.1 0");
 
     // Quick fix: Rotate VRM models by 180 degree
-    if (source === "avatar-connect-crypto-avatars") {
+    if (source === "crypto-avatars" || source === "meebits") {
       avatarEl.setAttribute("rotation", "0 180 0");
     }
 
