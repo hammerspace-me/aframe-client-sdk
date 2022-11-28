@@ -4,7 +4,7 @@ module.exports = {
   entry: ["@babel/polyfill", "./index.js"],
   output: {
     path: __dirname,
-    filename: "./dist/backpack-aframe-client-sdk.min.js",
+    filename: "./dist/aframe-client-sdk.min.js",
   },
   mode: "production",
   module: {

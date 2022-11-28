@@ -1,89 +1,96 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <title>Backpack Avatar Selector Component</title>
-    <meta name="description" content="Example of Backpack avatar selector component"></meta>
+    <title>Hammerspace Avatar Selector Component</title>
+    <meta name="description" content="Example of hammerspace avatar selector component">
+    </meta>
     <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="../../dist/backpack-aframe-client-sdk.js"></script>
-    <script src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
-  </head>
-  <body>
-    <a-scene
-      environment="preset: default"
-      renderer="colorManagement: true;"
-      backpack-scene
-    >
-      <a-assets>
-        <img id="previewThumbnail" src="./assets/preview.png" />
-      </a-assets>
-      <a-entity
-        position="1 1.6 6"
-        camera
-        look-controls="pointerLockEnabled: true"
-        wasd-controls
-      >
-        <a-cursor></a-cursor>
-      </a-entity>
+    <script src="../../dist/aframe-client-sdk.js"></script>
+    <script
+        src="https://unpkg.com/aframe-environment-component@1.3.1/dist/aframe-environment-component.min.js"></script>
+</head>
+
+<body>
+    <a-scene environment="preset: default" renderer="colorManagement: true;" hammerspace-scene>
+        <a-assets>
+            <img id="previewThumbnail" src="./assets/preview.png" />
+        </a-assets>
+        <a-entity position="1 1.6 6" camera look-controls="pointerLockEnabled: true" wasd-controls>
+            <a-cursor></a-cursor>
+        </a-entity>
     </a-scene>
     <script>
-      // We can retrieve the access token by a cookie or use any other mechanism to transfer it
-      function getCookie(cname) {
-        let name = cname + "=";
-        let decodedCookie = decodeURIComponent(document.cookie);
-        let ca = decodedCookie.split(";");
-        for (let i = 0; i < ca.length; i++) {
-          let c = ca[i];
-          while (c.charAt(0) == " ") {
-            c = c.substring(1);
-          }
-          if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-          }
+        function getOAuthUrl() {
+            // Disclaimer: For development and testing purposes only
+            const CLIENT_ID = "e41834b6-1861-4108-ae60-088a08bf914d";
+            const REDIRECT_URI = "http://localhost:9000/examples/avatar-selector/index.html";
+            const SCOPE = "avatars:read";
+
+            return 'https://frontend.hammerspace.me/oauth/authorize?response_type=token&client_id=' + CLIENT_ID + '&redirect_uri=' + REDIRECT_URI + '&scope=' + SCOPE;
         }
-        return "";
-      }
 
-      // We need to register a scene component, if we want to retrieve the access token at runtime
-      AFRAME.registerComponent("backpack-scene", {
-        init: function () {
-          var sceneEl = this.el;
-          var backpackEl = document.createElement("a-entity");
+        function getQueryParameter(key) {
+            const params = new Proxy(new URLSearchParams(window.location.search), {
+                get: (searchParams, prop) => searchParams.get(prop),
+            });
 
-          // We add a backpack component to the scene by providing the backend url and access token
-          backpackEl.setAttribute("backpack-avatar-selector", {
-            backpackUrl: "http://localhost:3000",
-            accessToken: getCookie("access_token"),
-          });
-          sceneEl.appendChild(backpackEl);
+            return params[key];
+        }
 
-          this.el.addEventListener("backpack:init", (event) => {
-            console.log("Backpack initialized");
-          });
+        // We can retrieve the access token by a query parameter or a cookie or use any other mechanism to transfer it
+        function getAccessToken() {
+            return getQueryParameter("access_token");
+        }
 
-          this.el.addEventListener("backpack:error", (event) => {
-            console.log("Backpack error", event);
-          });
+        // We need to register a scene component, if we want to retrieve the access token at runtime
+        AFRAME.registerComponent("hammerspace-scene", {
+            init: function () {
+                var sceneEl = this.el;
+                var hammerspaceEl = document.createElement("a-entity");
 
-          this.el.addEventListener("backpack:received-items", (event) => {
-            console.log("Backpack items", event);
-          });
+                var accessToken = getAccessToken();
 
-          this.el.addEventListener("backpack:avatar-selected", (event) => {
-            console.log("Backpack avatar selected", event);
-          });
+                if (!accessToken) {
+                    // Redirect to OAuth if no access token is present
+                    window.location.replace(getOAuthUrl());
+                }
 
-          // Add a portal with link to the experience
-          var portal = document.createElement("a-entity");
-          portal.setAttribute("position", "-5 1.6 0");
-          portal.setAttribute("backpack-portal", {
-            href: "https://experience.metabag.dev",
-            title: "Meditation PoC",
-            image: "#previewThumbnail",
-          });
+                // We add a hammerspace component to the scene by providing the backend url and access token
+                hammerspaceEl.setAttribute("hammerspace-avatar-selector", {
+                    accessToken: accessToken,
+                });
+                sceneEl.appendChild(hammerspaceEl);
 
-          sceneEl.appendChild(portal);
-        },
-      });
+                this.el.addEventListener("hammerspace:init", (event) => {
+                    console.log("hammerspace initialized");
+                });
+
+                this.el.addEventListener("hammerspace:error", (event) => {
+                    console.log("hammerspace error", event);
+                });
+
+                this.el.addEventListener("hammerspace:received-items", (event) => {
+                    console.log("hammerspace items", event);
+                });
+
+                this.el.addEventListener("hammerspace:avatar-selected", (event) => {
+                    console.log("hammerspace avatar selected", event);
+                });
+
+                // Add a portal with link to the experience
+                var portal = document.createElement("a-entity");
+                portal.setAttribute("position", "-5 1.6 0");
+                portal.setAttribute("hammerspace-portal", {
+                    href: "https://metameditation.dev/experience.html",
+                    title: "Meditation PoC",
+                    image: "#previewThumbnail",
+                });
+
+                sceneEl.appendChild(portal);
+            },
+        });
     </script>
+
 </html>
