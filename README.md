@@ -95,6 +95,10 @@ const PROVIDER_LOADERS = {
 };
 ```
 
+## Known issues
+
+-   Vulnerability alert when installing dependencies: There are a few vulnerabilities detected when running `npm install`. We are aware of the issue, but can not resolve it at the moment. The vulnerabilities are part of A-Frame, specifically in dependencies of A-Frame, that have not been fixed by A-Frame yet. We will update A-Frame to the latest version as soon as they release a new version. Keep in mind that A-Frame is a dev dependency only, the vulnerable code will not be shipped with our SDK.
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
