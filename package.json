@@ -1,6 +1,6 @@
 {
     "name": "@hammerspace-me/aframe-client-sdk",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "description": "A-Frame components for Hammerspace",
     "main": "index.js",
     "scripts": {

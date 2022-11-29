@@ -11,7 +11,7 @@ const PROVIDER_LOADERS = {
             console.error("Required metadata is not present");
         }
         const gender =
-            avatar.metadata.outfitGender === "masculine"
+            avatar.metadata.type === "humanoid-male"
                 ? "animated-m"
                 : "animated-f";
         avatarEntity.setAttribute("rig-animation", {
