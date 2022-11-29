@@ -37,7 +37,7 @@ const PROVIDER_LOADERS = {
 };
 
 const getHammerspaceAvatar = async (itemId, hammerspaceBackend) => {
-    const jsonUrl = hammerspaceBackend + "/space/item/" + itemId;
+    const jsonUrl = hammerspaceBackend + "/item/" + itemId;
     const response = await fetch(jsonUrl);
     const item = await response.json();
     return item;
